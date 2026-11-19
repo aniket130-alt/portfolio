@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[Your Name] — Software Engineer</title>
+  <meta name="description" content="Portfolio of [Your Name], [Job title]. Experience, projects and skills." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- ========== Navbar ========== -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a href="#top" class="brand" aria-label="Home">
+        <span class="brand__logo" data-field="initials">YN</span>
+        <span class="brand__name" data-field="name">[Your Name]</span>
+      </a>
+
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav__menu" id="nav-menu">
+        <a href="#experience" class="nav__link">Experience</a>
+        <a href="#projects" class="nav__link">Projects</a>
+        <a href="#skills" class="nav__link">Skills</a>
+        <a href="assets/cv.pdf" class="btn btn--primary btn--sm" data-link="cv" download>Download CV</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main" id="top">
+    <!-- ========== Hero ========== -->
+    <section class="card hero">
+      <div class="hero__photo" role="img" aria-label="Profile photo">
+        <!-- Replace with: <img src="assets/images/profile.jpg" alt="[Your Name]" /> -->
+        <span>[Your photo]</span>
+      </div>
+      <div class="hero__body">
+        <span class="badge" data-field="status_badge">Open to full-time roles</span>
+        <h1 class="hero__title">
+          <span class="hero__name" data-field="name">[Your Name]</span>
+          <span class="hero__role" data-field="role">[Job title — e.g. Software Engineer]</span>
+        </h1>
+        <p class="hero__intro" data-field="intro">
+          [2–3 lines: years of experience, your specialty, and the impact you bring to a team.]
+        </p>
+        <p class="hero__meta">
+          <span data-field="location">[City, Country]</span>
+          <span class="dot">·</span>
+          <a href="mailto:hello@yourname.com" data-link="email" data-show-text>hello@yourname.com</a>
+          <span class="dot">·</span>
+          <a href="https://linkedin.com/in/yourname" target="_blank" rel="noopener" data-link="linkedin">linkedin.com/in/[yourname]</a>
+        </p>
+        <div class="hero__actions">
+          <a href="assets/cv.pdf" class="btn btn--primary" data-link="cv" download>Download CV</a>
+          <a href="#contact" class="btn btn--outline">Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Experience + Sidebar ========== -->
+    <div class="grid">
+      <section class="card experience reveal" id="experience">
+        <h2 class="section-title">Experience</h2>
+        <ol class="timeline" id="experience-list">
+          <li class="timeline__item">
+            <h3 class="timeline__role">[Job title]</h3>
+            <p class="timeline__org">[Company] · 2024 — Present</p>
+            <p class="timeline__desc">One line on what you owned and a result you are proud of.</p>
+          </li>
+          <li class="timeline__item">
+            <h3 class="timeline__role">[Job title]</h3>
+            <p class="timeline__org">[Company] · 2022 — 2024</p>
+            <p class="timeline__desc">One line on what you owned and a result you are proud of.</p>
+          </li>
+          <li class="timeline__item">
+            <h3 class="timeline__role">[Internship / Job title]</h3>
+            <p class="timeline__org">[Company] · 2021 — 2022</p>
+            <p class="timeline__desc">One line on what you owned and a result you are proud of.</p>
+          </li>
+        </ol>
+      </section>
+
+      <aside class="sidebar">
+        <section class="card skills reveal" id="skills">
+          <h2 class="section-title section-title--sm">Skills</h2>
+          <ul class="skills__list" id="skills-list">
+            <li class="skill" style="--level: 90%">
+              <div class="skill__head"><span>[Skill one]</span><span>90%</span></div>
+              <div class="skill__bar"><div class="skill__fill"></div></div>
+            </li>
+            <li class="skill" style="--level: 85%">
+              <div class="skill__head"><span>[Skill two]</span><span>85%</span></div>
+              <div class="skill__bar"><div class="skill__fill"></div></div>
+            </li>
+            <li class="skill" style="--level: 80%">
+              <div class="skill__head"><span>[Skill three]</span><span>80%</span></div>
+              <div class="skill__bar"><div class="skill__fill"></div></div>
+            </li>
+            <li class="skill" style="--level: 70%">
+              <div class="skill__head"><span>[Skill four]</span><span>70%</span></div>
+              <div class="skill__bar"><div class="skill__fill"></div></div>
+            </li>
+            <li class="skill" style="--level: 65%">
+              <div class="skill__head"><span>[Skill five]</span><span>65%</span></div>
+              <div class="skill__bar"><div class="skill__fill"></div></div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="card education reveal">
+          <h2 class="section-title section-title--sm">Education</h2>
+          <div id="education-body">
+          <p class="education__degree">[Degree, Major]</p>
+          <p class="education__item">[University] · [Year]</p>
+          <p class="education__item">[Certification] · [Year]</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- ========== Projects ========== -->
+    <section class="projects" id="projects">
+      <h2 class="section-title">Featured projects</h2>
+      <div class="projects__grid" id="projects-grid">
+        <article class="project reveal">
+          <div class="project__img"><span>[Project image]</span></div>
+          <div class="project__body">
+            <h3 class="project__title">[Project one]</h3>
+            <p class="project__desc">What it is, the tools you used and the outcome.</p>
+            <a href="#" class="project__link">View details <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="project__img"><span>[Project image]</span></div>
+          <div class="project__body">
+            <h3 class="project__title">[Project two]</h3>
+            <p class="project__desc">What it is, the tools you used and the outcome.</p>
+            <a href="#" class="project__link">View details <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="project__img"><span>[Project image]</span></div>
+          <div class="project__body">
+            <h3 class="project__title">[Project three]</h3>
+            <p class="project__desc">What it is, the tools you used and the outcome.</p>
+            <a href="#" class="project__link">View details <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========== Contact CTA ========== -->
+    <section class="cta reveal" id="contact">
+      <div>
+        <h2 class="cta__title">Let's work together</h2>
+        <p class="cta__sub" data-field="reply_note">I usually reply within 24 hours.</p>
+      </div>
+      <a href="mailto:hello@yourname.com" class="btn btn--white" data-link="email" data-show-text>hello@yourname.com</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © <span id="year">2026</span> <span data-field="name">[Your Name]</span>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
