@@ -1,123 +1,196 @@
 -- =============================================================
--- Portfolio content schema for Supabase
--- Run once in: Supabase Dashboard → SQL Editor → New query → Run
--- Then edit your content in: Table Editor
+-- Portfolio database — complete schema
+-- Supabase Dashboard → SQL Editor → New query → paste → Run
+--
+-- Safe to run on a new OR existing project, as many times as you like:
+-- it only creates what's missing and never deletes your content.
+-- Optional starter content is in seed.sql.
 -- =============================================================
 
--- ---------- Profile (single row) ----------
+
+-- ============ 1. Admin access ============
+-- Only users listed here can edit content or upload files.
+create table if not exists public.admins (
+  user_id uuid primary key references auth.users (id) on delete cascade
+);
+alter table public.admins enable row level security;
+-- (no policies: the table is invisible through the API)
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (select 1 from public.admins where user_id = (select auth.uid()));
+$$;
+revoke execute on function public.is_admin() from public;
+grant execute on function public.is_admin() to anon, authenticated;
+
+
+-- ============ 2. Content tables ============
+
+-- Profile: a single row (id = 1)
 create table if not exists public.profile (
-  id             int primary key default 1 check (id = 1),  -- enforces one row
-  name           text not null,
-  initials       text not null,
-  role           text not null,
-  intro          text,
-  location       text,
-  email          text,
-  linkedin_url   text,
-  status_badge   text,          -- e.g. "Open to full-time roles"; null hides it
-  photo_url      text,          -- public URL from the "portfolio" storage bucket
-  cv_url         text,          -- public URL to your CV PDF
-  reply_note     text default 'I usually reply within 24 hours.'
+  id           int primary key default 1 check (id = 1),
+  name         text not null,
+  initials     text not null,
+  role         text not null
 );
+alter table public.profile add column if not exists headline      text;
+alter table public.profile add column if not exists intro         text;
+alter table public.profile add column if not exists about         text;
+alter table public.profile add column if not exists location      text;
+alter table public.profile add column if not exists email         text;
+alter table public.profile add column if not exists phone         text;
+alter table public.profile add column if not exists linkedin_url  text;
+alter table public.profile add column if not exists github_url    text;
+alter table public.profile add column if not exists instagram_url text;
+alter table public.profile add column if not exists x_url         text;
+alter table public.profile add column if not exists status_badge  text;
+alter table public.profile add column if not exists available     boolean not null default true;
+alter table public.profile add column if not exists photo_url     text;
+alter table public.profile add column if not exists cv_url        text;
+alter table public.profile add column if not exists reply_note    text;
+alter table public.profile drop constraint if exists profile_phone_check;
+alter table public.profile add constraint profile_phone_check
+  check (phone is null or phone ~ '^\+?[0-9 ()\-]{6,20}$');
 
--- ---------- Experience ----------
-create table if not exists public.experience (
+create table if not exists public.stats (
   id          bigint generated always as identity primary key,
-  role        text not null,
-  company     text not null,
-  period      text not null,     -- e.g. "2024 — Present"
-  summary     text,
-  sort_order  int not null default 0
-);
-
--- ---------- Skills ----------
-create table if not exists public.skills (
-  id          bigint generated always as identity primary key,
-  name        text not null,
-  level       int  not null check (level between 0 and 100),
+  value       text not null,
+  label       text not null,
+  icon        text,                               -- code | briefcase | graduation-cap | star
   sort_order  int  not null default 0
 );
 
--- ---------- Education ----------
-create table if not exists public.education (
+create table if not exists public.skills (
   id          bigint generated always as identity primary key,
-  label       text not null,     -- "B.Tech, Computer Science" / "University name" / "AWS Certified ..."
-  year        text,              -- shown as "label · year" when set
-  is_degree   boolean not null default false,  -- true = bold headline line
-  sort_order  int not null default 0
+  name        text not null,
+  sort_order  int  not null default 0
 );
+alter table public.skills add column if not exists category text not null default 'Other';
+alter table public.skills add column if not exists icon     text;   -- simple-icons slug
+-- v1 had a required "level" (%) column; it's unused now
+do $$ begin
+  if exists (select 1 from information_schema.columns
+             where table_schema = 'public' and table_name = 'skills' and column_name = 'level') then
+    alter table public.skills alter column level drop not null;
+  end if;
+end $$;
 
--- ---------- Projects ----------
 create table if not exists public.projects (
   id           bigint generated always as identity primary key,
   title        text not null,
   description  text,
   image_url    text,
-  link_url     text,
-  published    boolean not null default true,  -- untick to hide without deleting
+  published    boolean not null default true,
   sort_order   int not null default 0
 );
+alter table public.projects add column if not exists slug           text;
+alter table public.projects add column if not exists features       text[] not null default '{}';
+alter table public.projects add column if not exists tags           text[] not null default '{}';
+alter table public.projects add column if not exists demo_url       text;
+alter table public.projects add column if not exists github_url     text;
+alter table public.projects add column if not exists case_study_url text;
 
--- ---------- Row Level Security: public read-only ----------
--- The site uses the public (anon/publishable) key, so it can only READ.
--- You edit content through the Supabase dashboard, which bypasses RLS.
-alter table public.profile    enable row level security;
-alter table public.experience enable row level security;
-alter table public.skills     enable row level security;
-alter table public.education  enable row level security;
-alter table public.projects   enable row level security;
+create table if not exists public.experience (
+  id          bigint generated always as identity primary key,
+  role        text not null,
+  company     text not null,
+  period      text not null,
+  summary     text,
+  sort_order  int  not null default 0
+);
+alter table public.experience add column if not exists location text;
+alter table public.experience add column if not exists bullets  text[] not null default '{}';
+alter table public.experience add column if not exists tags     text[] not null default '{}';
 
-drop policy if exists "public read" on public.profile;
-drop policy if exists "public read" on public.experience;
-drop policy if exists "public read" on public.skills;
-drop policy if exists "public read" on public.education;
-drop policy if exists "public read" on public.projects;
+create table if not exists public.education (
+  id          bigint generated always as identity primary key,
+  label       text not null,
+  year        text,
+  is_degree   boolean not null default false,
+  sort_order  int not null default 0
+);
 
-create policy "public read" on public.profile    for select to anon, authenticated using (true);
-create policy "public read" on public.experience for select to anon, authenticated using (true);
-create policy "public read" on public.skills     for select to anon, authenticated using (true);
-create policy "public read" on public.education  for select to anon, authenticated using (true);
-create policy "public read" on public.projects   for select to anon, authenticated using (published);
+-- Every UI label on the site (key → value), edited in Admin → Site text
+create table if not exists public.site_text (
+  key    text primary key,
+  value  text
+);
 
--- ---------- Storage bucket for photo, project images and CV ----------
--- Public bucket: files are readable via their public URL; only you can upload (dashboard).
+-- Contact form submissions
+create table if not exists public.contact_messages (
+  id          bigint generated always as identity primary key,
+  name        text not null check (char_length(name) between 1 and 100),
+  email       text not null check (char_length(email) between 3 and 200),
+  message     text not null check (char_length(message) between 1 and 5000),
+  is_read     boolean not null default false,
+  created_at  timestamptz not null default now()
+);
+
+
+-- ============ 3. Row Level Security ============
+-- Visitors: read content only. Admins: everything. Messages: visitors can only send.
+do $$
+declare t text;
+begin
+  foreach t in array array['profile','stats','skills','projects','experience','education','site_text'] loop
+    execute format('alter table public.%I enable row level security', t);
+    execute format('drop policy if exists "public read" on public.%I', t);
+    execute format('drop policy if exists "admin write" on public.%I', t);
+    execute format('create policy "admin write" on public.%I for all to authenticated using (public.is_admin()) with check (public.is_admin())', t);
+    execute format('grant select on public.%I to anon, authenticated', t);
+    execute format('grant insert, update, delete on public.%I to authenticated', t);
+    if t <> 'projects' then
+      execute format('create policy "public read" on public.%I for select to anon, authenticated using (true)', t);
+    end if;
+  end loop;
+end $$;
+-- Unpublished projects stay hidden from visitors (admins see all via "admin write")
+create policy "public read" on public.projects for select to anon, authenticated using (published);
+
+alter table public.contact_messages enable row level security;
+drop policy if exists "anyone can send" on public.contact_messages;
+drop policy if exists "admin manage"    on public.contact_messages;
+create policy "anyone can send" on public.contact_messages
+  for insert to anon, authenticated with check (is_read = false);
+create policy "admin manage" on public.contact_messages
+  for all to authenticated using (public.is_admin()) with check (public.is_admin());
+grant insert on public.contact_messages to anon, authenticated;
+grant select, update, delete on public.contact_messages to authenticated;
+
+
+-- ============ 4. File storage (photo, project images, resume) ============
+-- Public read by URL; max 5 MB; images + PDF only (no SVG — it can contain scripts).
 insert into storage.buckets (id, name, public)
 values ('portfolio', 'portfolio', true)
 on conflict (id) do nothing;
 
--- ---------- Starter content (edit in Table Editor afterwards) ----------
-insert into public.profile (id, name, initials, role, intro, location, email, linkedin_url, status_badge)
-values (
-  1, 'Your Name', 'YN', 'Software Engineer',
-  '2–3 lines: years of experience, your specialty, and the impact you bring to a team.',
-  'City, Country', 'hello@yourname.com', 'https://linkedin.com/in/yourname',
-  'Open to full-time roles'
-)
-on conflict (id) do nothing;
+update storage.buckets
+set public             = true,
+    file_size_limit    = 5242880,
+    allowed_mime_types = array['image/png','image/jpeg','image/webp','image/gif','image/avif','application/pdf']
+where id = 'portfolio';
 
-insert into public.experience (role, company, period, summary, sort_order)
-select * from (values
-  ('Job title',               'Company', '2024 — Present', 'One line on what you owned and a result you are proud of.', 1),
-  ('Job title',               'Company', '2022 — 2024',    'One line on what you owned and a result you are proud of.', 2),
-  ('Internship / Job title',  'Company', '2021 — 2022',    'One line on what you owned and a result you are proud of.', 3)
-) v where not exists (select 1 from public.experience);
+drop policy if exists "portfolio admin all"   on storage.objects;
+drop policy if exists "portfolio admin write" on storage.objects;
+create policy "portfolio admin write" on storage.objects
+  for all to authenticated
+  using (bucket_id = 'portfolio' and public.is_admin())
+  with check (
+    bucket_id = 'portfolio'
+    and public.is_admin()
+    and (storage.foldername(name))[1] in ('about', 'profile', 'projects', 'resume')
+  );
 
-insert into public.skills (name, level, sort_order)
-select * from (values
-  ('Skill one', 90, 1), ('Skill two', 85, 2), ('Skill three', 80, 3),
-  ('Skill four', 70, 4), ('Skill five', 65, 5)
-) v where not exists (select 1 from public.skills);
 
-insert into public.education (label, year, is_degree, sort_order)
-select * from (values
-  ('Degree, Major', null::text, true,  1),
-  ('University',    'Year',     false, 2),
-  ('Certification', 'Year',     false, 3)
-) v where not exists (select 1 from public.education);
-
-insert into public.projects (title, description, link_url, sort_order)
-select * from (values
-  ('Project one',   'What it is, the tools you used and the outcome.', '#', 1),
-  ('Project two',   'What it is, the tools you used and the outcome.', '#', 2),
-  ('Project three', 'What it is, the tools you used and the outcome.', '#', 3)
-) v where not exists (select 1 from public.projects);
+-- ============ 5. Make yourself an admin ============
+-- 1) Authentication → Users → Add user (tick "Auto Confirm User")
+-- 2) Put your email below, then run just this statement:
+--
+-- insert into public.admins (user_id)
+-- select id from auth.users where lower(email) = lower('you@example.com')
+-- on conflict do nothing;

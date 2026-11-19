@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import { fallbackContent } from "./fallback";
+import { emptyContent } from "./fallback";
 import { DEFAULT_TEXT, mergeText } from "./siteText";
 import { serverClient, supabaseConfigured } from "./supabase";
 import type { Content, Education, Experience, Profile, Project, Skill, Stat } from "./types";
@@ -20,6 +20,11 @@ const url = (v: unknown): string | null => {
     return null;
   }
 };
+/** Phone: digits, spaces, + ( ) - only (used in tel:). */
+const phone = (v: unknown): string | null => {
+  const s = str(v);
+  return s && /^\+?[0-9 ()\-]{6,20}$/.test(s) ? s : null;
+};
 /** Plain email only (used in mailto:). */
 const email = (v: unknown): string | null => {
   const s = str(v);
@@ -27,18 +32,18 @@ const email = (v: unknown): string | null => {
 };
 
 function normProfile(p: Record<string, unknown> | null): Profile {
-  const f = fallbackContent.profile;
-  if (!p) return f;
+  if (!p) return emptyContent.profile;
   return {
     id: 1,
-    name: str(p.name) ?? f.name,
-    initials: str(p.initials) ?? f.initials,
-    role: str(p.role) ?? f.role,
+    name: str(p.name) ?? "",
+    initials: str(p.initials) ?? "",
+    role: str(p.role) ?? "",
     headline: str(p.headline) ?? str(p.role),
     intro: str(p.intro),
     about: str(p.about),
     location: str(p.location),
     email: email(p.email),
+    phone: phone(p.phone),
     linkedin_url: url(p.linkedin_url),
     github_url: url(p.github_url),
     instagram_url: url(p.instagram_url),
@@ -61,7 +66,7 @@ export async function getContent(): Promise<Content> {
   cacheTag(CONTENT_TAG);
 
   const year = new Date().getFullYear();
-  if (!supabaseConfigured) return { ...fallbackContent, text: DEFAULT_TEXT, year, source: "fallback" };
+  if (!supabaseConfigured) return { ...emptyContent, text: DEFAULT_TEXT, year, source: "fallback" };
 
   const db = serverClient();
   const [text, profile, stats, skills, projects, experience, education] = await Promise.all([
@@ -79,16 +84,16 @@ export async function getContent(): Promise<Content> {
   const ok = <T,>(r: { error: unknown; data: T | null }, fb: T): T => (r.error || !r.data ? fb : r.data);
 
   return {
-    profile: profile.error ? fallbackContent.profile : normProfile(profile.data),
-    stats: ok(stats, fallbackContent.stats) as Stat[],
-    skills: (ok(skills, fallbackContent.skills) as Record<string, unknown>[]).map((s) => ({
+    profile: profile.error ? emptyContent.profile : normProfile(profile.data),
+    stats: ok(stats, emptyContent.stats) as Stat[],
+    skills: (ok(skills, emptyContent.skills) as Record<string, unknown>[]).map((s) => ({
       id: Number(s.id),
       name: String(s.name),
       category: str(s.category) ?? "Other",
       icon: str(s.icon),
       sort_order: Number(s.sort_order ?? 0),
     })) as Skill[],
-    projects: (ok(projects, fallbackContent.projects) as Record<string, unknown>[]).map((p) => ({
+    projects: (ok(projects, emptyContent.projects) as Record<string, unknown>[]).map((p) => ({
       id: Number(p.id),
       title: String(p.title),
       slug: str(p.slug),
@@ -103,7 +108,7 @@ export async function getContent(): Promise<Content> {
       published: true,
       sort_order: Number(p.sort_order ?? 0),
     })) as Project[],
-    experience: (ok(experience, fallbackContent.experience) as Record<string, unknown>[]).map((e) => ({
+    experience: (ok(experience, emptyContent.experience) as Record<string, unknown>[]).map((e) => ({
       id: Number(e.id),
       role: String(e.role),
       company: String(e.company),
@@ -114,7 +119,7 @@ export async function getContent(): Promise<Content> {
       tags: arr(e.tags),
       sort_order: Number(e.sort_order ?? 0),
     })) as Experience[],
-    education: ok(education, fallbackContent.education) as Education[],
+    education: ok(education, emptyContent.education) as Education[],
     text: mergeText(text.error ? null : text.data),
     year,
     source: failed.length ? "fallback" : "supabase",

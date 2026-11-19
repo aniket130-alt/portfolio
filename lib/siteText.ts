@@ -18,6 +18,7 @@ export const TEXT_FIELDS = [
   { group: "Navigation", key: "nav_skills", label: "Skills link", default: "Skills" },
   { group: "Navigation", key: "nav_contact", label: "Contact link", default: "Contact" },
   { group: "Navigation", key: "nav_cta", label: "Navbar button", default: "Let's Talk" },
+  { group: "Navigation", key: "skip_link", label: "Skip-to-content link (keyboard users)", default: "Skip to content" },
 
   // Hero
   { group: "Hero", key: "hero_greeting", label: "Greeting before name", default: "Hi, I'm" },
@@ -48,26 +49,27 @@ export const TEXT_FIELDS = [
   { group: "Contact", key: "contact_accent", label: "Heading (highlighted)", default: "In Touch" },
   { group: "Contact", key: "contact_heading", label: "Big line", default: "Let's build something amazing together." },
   { group: "Contact", key: "contact_email_button", label: "Email button", default: "Email Me" },
+  { group: "Contact", key: "contact_phone_label", label: "Phone label (for screen readers)", default: "Call" },
   { group: "Contact", key: "form_title", label: "Form title", default: "Send a message" },
   { group: "Contact", key: "form_name", label: "Name field label", default: "Name" },
   { group: "Contact", key: "form_email", label: "Email field label", default: "Email" },
   { group: "Contact", key: "form_message", label: "Message field label", default: "Message" },
   { group: "Contact", key: "form_submit", label: "Send button", default: "Send message" },
+  { group: "Contact", key: "form_err_name", label: "Error: name missing", default: "Please enter your name." },
+  { group: "Contact", key: "form_err_email", label: "Error: invalid email", default: "Please enter a valid email address." },
+  { group: "Contact", key: "form_err_message", label: "Error: message too short", default: "Please write at least 10 characters." },
   { group: "Contact", key: "form_sending", label: "Sending state", default: "Sending…" },
   { group: "Contact", key: "form_success", label: "Success message", default: "Thanks! Your message was sent. I'll get back to you soon.", type: "textarea" },
   { group: "Contact", key: "form_error", label: "Error message", default: "Something went wrong. Please try again or email me directly.", type: "textarea" },
 
   // Footer
   { group: "Footer", key: "footer_rights", label: "Rights text", default: "All rights reserved." },
-  { group: "Footer", key: "footer_built_with", label: "Built with", default: "Built with Next.js, Tailwind CSS & Supabase" },
+  { group: "Footer", key: "footer_built_with", label: "Middle line (optional, e.g. Built with …)", default: "" },
   { group: "Footer", key: "footer_top", label: "Back to top link", default: "Back to top" },
 
   // SEO
-  { group: "SEO", key: "seo_title", label: "Page title", default: "Aniket Jindal | Full Stack Developer" },
-  {
-    group: "SEO", key: "seo_description", label: "Meta description", type: "textarea",
-    default: "Full Stack Developer building modern, scalable web applications with React, TypeScript, Golang and PostgreSQL.",
-  },
+  { group: "SEO", key: "seo_title", label: "Page title (empty = Name | Role from Profile)", default: "" },
+  { group: "SEO", key: "seo_description", label: "Meta description (empty = hero intro)", type: "textarea", default: "" },
 
   // Section visibility
   { group: "Sections", key: "show_about", label: "Show About", default: "true", type: "toggle" },

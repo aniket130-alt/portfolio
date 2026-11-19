@@ -7,17 +7,19 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "sw
 
 export async function generateMetadata(): Promise<Metadata> {
   const { text: t, profile } = await getContent();
+  const title = t.seo_title.trim() || [profile.name, profile.role].filter(Boolean).join(" | ");
+  const description = t.seo_description.trim() || profile.intro || profile.about || "";
   return {
-    title: t.seo_title,
-    description: t.seo_description,
-    authors: [{ name: profile.name }],
+    title,
+    description,
+    authors: profile.name ? [{ name: profile.name }] : undefined,
     openGraph: {
-      title: t.seo_title,
-      description: t.seo_description,
+      title,
+      description,
       type: "website",
-      siteName: profile.name,
+      siteName: profile.name || undefined,
     },
-    twitter: { card: "summary_large_image", title: t.seo_title, description: t.seo_description },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

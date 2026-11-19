@@ -1,7 +1,7 @@
 "use server";
 
 import { updateTag } from "next/cache";
-import { CONTENT_TAG } from "@/lib/content";
+import { CONTENT_TAG, getContent } from "@/lib/content";
 import { serverClient, supabaseConfigured } from "@/lib/supabase";
 
 export type ContactState = {
@@ -12,7 +12,7 @@ export type ContactState = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/** Contact form → public.contact_messages (insert-only for visitors, see supabase/v2.sql). */
+/** Contact form → public.contact_messages (insert-only for visitors, see supabase/schema.sql). */
 export async function sendContactMessage(_prev: ContactState, formData: FormData): Promise<ContactState> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
@@ -22,10 +22,11 @@ export async function sendContactMessage(_prev: ContactState, formData: FormData
   // Honeypot: real people never fill the hidden "company" field.
   if (String(formData.get("company") ?? "")) return { status: "success" };
 
+  const { text: t } = await getContent(); // wording editable in Admin → Site text
   const errors: ContactState["errors"] = {};
-  if (name.length < 2 || name.length > 100) errors.name = "Please enter your name.";
-  if (!EMAIL_RE.test(email) || email.length > 200) errors.email = "Please enter a valid email address.";
-  if (message.length < 10 || message.length > 5000) errors.message = "Please write at least 10 characters.";
+  if (name.length < 2 || name.length > 100) errors.name = t.form_err_name;
+  if (!EMAIL_RE.test(email) || email.length > 200) errors.email = t.form_err_email;
+  if (message.length < 10 || message.length > 5000) errors.message = t.form_err_message;
   if (Object.keys(errors).length) return { status: "error", errors, values };
 
   if (!supabaseConfigured) return { status: "error", values };

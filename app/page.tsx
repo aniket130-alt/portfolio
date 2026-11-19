@@ -1,11 +1,12 @@
-import { About } from "@/components/About";
-import { Contact } from "@/components/Contact";
-import { Experience } from "@/components/Experience";
-import { Footer } from "@/components/Footer";
-import { Hero } from "@/components/Hero";
-import { Navbar, type NavLink } from "@/components/Navbar";
-import { Projects } from "@/components/Projects";
-import { Skills } from "@/components/Skills";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar, type NavLink } from "@/components/layout/Navbar";
+import { SkipLink } from "@/components/layout/SkipLink";
+import { About } from "@/components/sections/about/About";
+import { Contact } from "@/components/sections/contact/Contact";
+import { Experience } from "@/components/sections/experience/Experience";
+import { Hero } from "@/components/sections/hero/Hero";
+import { Projects } from "@/components/sections/projects/Projects";
+import { Skills } from "@/components/sections/skills/Skills";
 import { getContent } from "@/lib/content";
 import { isOn } from "@/lib/siteText";
 
@@ -14,7 +15,9 @@ export default async function Home() {
   const t = c.text;
 
   const show = {
-    about: isOn(t.show_about),
+    about:
+      isOn(t.show_about) &&
+      Boolean(c.profile.about || c.profile.photo_url || c.stats.length || c.education.length || c.profile.location),
     projects: isOn(t.show_projects) && c.projects.length > 0,
     experience: isOn(t.show_experience) && c.experience.length > 0,
     skills: isOn(t.show_skills) && c.skills.length > 0,
@@ -31,12 +34,7 @@ export default async function Home() {
 
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
-      >
-        Skip to content
-      </a>
+      <SkipLink label={t.skip_link} />
       <Navbar name={c.profile.name} initials={c.profile.initials} links={links} cta={t.nav_cta} />
       <main id="main">
         <Hero profile={c.profile} t={t} />

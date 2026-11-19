@@ -1,4 +1,4 @@
-// Shapes of the Supabase tables (see supabase/schema.sql + supabase/v2.sql).
+// Shapes of the Supabase tables (see supabase/schema.sql).
 
 export type Profile = {
   id: number;
@@ -10,6 +10,7 @@ export type Profile = {
   about: string | null;         // About section bio
   location: string | null;
   email: string | null;
+  phone: string | null;         // shown in Contact as a tel: link
   linkedin_url: string | null;
   github_url: string | null;
   instagram_url: string | null;
