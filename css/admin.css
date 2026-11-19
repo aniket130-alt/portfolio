@@ -1,0 +1,81 @@
+/* Admin page — builds on the tokens and components in styles.css */
+[hidden] { display: none !important; }
+.admin-main { padding-top: 32px; padding-bottom: 64px; }
+.admin-main .card { padding: 28px; }
+@media (max-width: 720px) { .admin-main .card { padding: 20px; } }
+.admin-h1 { font-size: 26px; color: var(--navy); letter-spacing: -0.01em; }
+.admin-muted { color: var(--muted); margin-top: 6px; }
+.admin-notice p { margin-top: 10px; color: var(--slate); }
+.admin-notice code, .admin-panel code { background: var(--bg); padding: 2px 6px; border-radius: 6px; font-size: .92em; }
+
+.admin-login { max-width: 420px; margin: 40px auto 0; }
+.admin-error { color: #b42318; font-size: 14px; min-height: 1.2em; }
+.admin-error:empty { display: none; }
+
+.admin-user { display: flex; align-items: center; gap: 10px; }
+.admin-user__email { color: var(--muted); font-size: 14px; }
+
+/* Tabs */
+.admin-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.admin-tab {
+  font: inherit; font-weight: 600; font-size: 14px;
+  padding: 9px 16px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--surface); color: var(--slate);
+}
+.admin-tab:hover { border-color: var(--teal); color: var(--teal); }
+.admin-tab[aria-selected="true"] { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+.admin-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.admin-panel__head h2 { font-size: 20px; color: var(--navy); }
+.admin-list { display: grid; gap: 16px; }
+.admin-empty { color: var(--muted); padding: 24px; text-align: center; border: 1.5px dashed var(--border); border-radius: var(--radius); }
+
+/* Forms */
+.admin-form { display: grid; gap: 14px; margin-top: 20px; }
+.admin-row { display: grid; gap: 14px; }
+.admin-row__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.field--wide { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; }
+.field__label { font-size: 13px; font-weight: 600; color: var(--slate); }
+.field__label .req { color: var(--teal); }
+.field input[type="text"], .field input[type="email"], .field input[type="password"],
+.field input[type="url"], .field input[type="number"], .field textarea {
+  font: inherit; font-size: 15px; color: var(--text);
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--surface);
+}
+.field textarea { min-height: 84px; resize: vertical; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-tint); }
+.field--check { display: flex; align-items: center; gap: 8px; align-self: end; padding-bottom: 10px; }
+.field--check input { width: 18px; height: 18px; accent-color: var(--teal); }
+
+.upload { display: flex; gap: 8px; align-items: center; }
+.upload input[type="url"] { flex: 1; min-width: 0; }
+.upload__btn { position: relative; overflow: hidden; }
+.upload__btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload__preview { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; background: var(--placeholder); flex: none; }
+.upload__preview[hidden] { display: none; }
+
+.admin-row__actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.admin-row__actions .spacer { flex: 1; }
+.btn--danger { background: #fff; color: #b42318; border-color: #f3c7c2; }
+.btn--danger:hover { border-color: #b42318; }
+.btn--icon { padding: 9px 12px; font-size: 14px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.dirty-dot { font-size: 13px; color: var(--teal-dark); font-weight: 600; }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+  background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 10px;
+  font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100% - 32px);
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+.toast.is-error { background: #b42318; }
+
+@media (max-width: 720px) {
+  .admin-row__fields { grid-template-columns: 1fr; }
+  .admin-user__email { display: none; }
+  .admin-user .btn[target] { display: none; }
+}

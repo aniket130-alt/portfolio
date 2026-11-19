@@ -61,6 +61,16 @@ start index.html
 npx serve .
 ```
 
+## Content management (Supabase)
+
+Content is loaded from Supabase when `js/config.js` has your Project URL and anon/publishable key; otherwise the static text in `index.html` is shown.
+
+1. SQL Editor: run `supabase/schema.sql`, then `supabase/admin.sql`.
+2. Authentication → Users → **Add user** (tick *Auto Confirm User*).
+3. Run `insert into public.admins (user_id) select id from auth.users where email = 'you@example.com';`
+4. Authentication → Sign In / Providers: turn **off** "Allow new users to sign up".
+5. Open `/admin.html`, sign in, and edit Profile, Experience, Skills, Education and Projects (with photo, CV and image uploads).
+
 ## Customize
 
 1. Replace every `[placeholder]` in `index.html` with your details.
