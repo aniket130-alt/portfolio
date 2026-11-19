@@ -1,10 +1,17 @@
-# Dependencies
-node_modules/
+# dependencies
+/node_modules
 
-# Environment / secrets (never commit Supabase service_role keys)
-.env
-.env.*
-!.env.example
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env files (Supabase publishable key is public, but keep env files local)
+.env*
+
+# vercel
+.vercel
 
 # Supabase CLI local files
 supabase/.branches/
@@ -13,16 +20,13 @@ supabase/.temp/
 # Claude Code local settings
 .claude/settings.local.json
 
-# Logs
+# logs / OS / editors
 *.log
 npm-debug.log*
-
-# OS files
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Editor folders
 .vscode/
 .idea/
 *.swp
+*.pem

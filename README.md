@@ -1,86 +1,72 @@
-# Portfolio
+# Aniket Jindal — Portfolio
 
-A one-page personal portfolio built from the design in `Portfolio-Design-9.pdf` (page 1 is the desktop layout, page 2 is mobile).
+Personal portfolio built from `Aniket_Jindal_Portfolio_Website_Structure.pdf`.
+All content is managed in Supabase and edited from the built-in admin page — nothing is hardcoded.
 
-## Tech Stack
+## Stack
 
-- **HTML5** with semantic markup
-- **CSS3** with custom properties (design tokens), Grid/Flexbox and responsive breakpoints
-- **Vanilla JavaScript** for the mobile menu, scroll-reveal, skill-bar animation and active nav link
-- **Inter** font from Google Fonts
-- No build step
+- **Next.js 16** (App Router, Cache Components) + **React 19** + **TypeScript**
+- **Tailwind CSS 4** — design tokens in `app/globals.css`
+- **Supabase** — content tables, auth for the admin page, storage for images/resume
+- **Lucide** + **Simple Icons** for icons
+- Deployed on **Vercel**
 
-## Project Structure
-
-```
-portfolio/
-├── index.html              # Page markup (all sections)
-├── css/styles.css          # Design tokens + all styles
-├── js/main.js              # Menu, reveal animations, nav highlight
-├── assets/                 # Add your files here (see "Customize")
-│   ├── cv.pdf
-│   └── images/
-├── Portfolio-Design-9.pdf  # Source design
-└── README.md
-```
-
-## Design Breakdown
-
-| Section | Desktop | Mobile |
-|---|---|---|
-| **Navbar** | "YN" logo + name; Experience / Projects / Skills links; teal **Download CV** button. Sticky. | Logo + name, hamburger menu |
-| **Hero card** | Round photo on the left; "Open to full-time roles" badge, name (navy), job title (slate), 2–3 line intro, location · email · LinkedIn | Centered and stacked; **Download CV** + **Contact** buttons replace the contact line |
-| **Experience** | White card with a timeline (teal dots, connecting line), 3 roles: title, company · dates (teal), one-line result | Full-width card |
-| **Skills** | Sidebar card with 5 labelled progress bars (90 / 85 / 80 / 70 / 65%) | Full-width card |
-| **Education** | Navy sidebar card: degree, university · year, certification · year | Full-width card |
-| **Featured projects** | 3-column grid of cards: image, title, description, "View details →" | Single column |
-| **Contact CTA** | Teal banner: "Let's work together", reply-time note, white email button | Stacked; full-width email button |
-| **Footer** | Centered "© 2026 [Your Name]" | Same |
-
-### Design Tokens
-
-| Token | Value | Used for |
-|---|---|---|
-| `--navy` | `#10295c` | Headings, name, education card |
-| `--teal` | `#0f7a76` | Primary buttons, logo, timeline dots, skill bars, CTA |
-| `--slate` | `#475569` | Job title, body text |
-| `--bg` | `#f4f6fa` | Page background |
-| `--border` | `#e2e8f0` | Card borders, image placeholders |
-| `--radius` | `16px` | Cards |
-| `--container` | `1120px` | Max content width |
-
-Breakpoints: **≤ 960px** stacks the sidebar under Experience and shows projects in 2 columns. **≤ 720px** switches to the mobile layout.
-
-## Running Locally
+## Run locally
 
 ```bash
-# Open directly
-start index.html
-
-# Or serve it
-npx serve .
+npm install
+# create .env.local with:
+# NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable or anon key>
+npm run dev
 ```
 
-## Content management (Supabase)
+- Site: http://localhost:3000
+- Admin: http://localhost:3000/admin
 
-Content is loaded from Supabase when `js/config.js` has your Project URL and anon/publishable key; otherwise the static text in `index.html` is shown.
+## Supabase setup (once)
 
-1. SQL Editor: run `supabase/schema.sql`, then `supabase/admin.sql`.
-2. Authentication → Users → **Add user** (tick *Auto Confirm User*).
-3. Run `insert into public.admins (user_id) select id from auth.users where email = 'you@example.com';`
-4. Authentication → Sign In / Providers: turn **off** "Allow new users to sign up".
-5. Open `/admin.html`, sign in, and edit Profile, Experience, Skills, Education and Projects (with photo, CV and image uploads).
+Run these in **Supabase → SQL Editor**, in order:
 
-## Customize
+1. `supabase/schema.sql` — base tables + public read access + storage bucket
+2. `supabase/admin.sql` — admin-only write access; then add your user to `public.admins`
+3. `supabase/v2.sql` — v2 columns, `stats`, `site_text`, `contact_messages`
+4. `supabase/v2_seed.sql` — optional starter content
 
-1. Replace every `[placeholder]` in `index.html` with your details.
-2. **Photo:** in `.hero__photo`, swap the `<span>` for `<img src="assets/images/profile.jpg" alt="Your Name" />`.
-3. **CV:** put your resume at `assets/cv.pdf`.
-4. **Skills:** change both the label and the `style="--level: 90%"` value on each `.skill`.
-5. **Projects:** swap each `.project__img` `<span>` for an `<img>` and set the "View details" `href`.
-6. **Email / LinkedIn:** update the `mailto:` and LinkedIn links in the hero and contact sections.
-7. **Colors:** edit the variables at the top of `css/styles.css`.
+## Editing content (`/admin`)
 
-## Deployment
+| Tab | What it controls |
+|---|---|
+| Profile | Name, headline, intro, bio, location, email, social links, availability badge, resume, photo |
+| Projects | Cards: summary, features, tags, demo/GitHub/case-study links, thumbnail, published |
+| Experience | Timeline: role, company, dates, location, bullets, tags |
+| Skills | Grouped chips (category + Simple Icons slug) |
+| Stats | The numbers in About |
+| Education | Degree line in the About card |
+| Site text | Every label on the site, SEO title/description, show/hide sections |
+| Messages | Contact form submissions |
 
-Push to GitHub and enable **GitHub Pages**, or drag the folder into **Netlify** or **Vercel**.
+Saving refreshes the public page immediately (`updateTag`); otherwise content is cached for an hour.
+
+## Project structure
+
+```
+app/
+  page.tsx            home page (reads Supabase via lib/content.ts)
+  admin/page.tsx      admin page
+  actions.ts          contact form + cache refresh (server actions)
+  layout.tsx          fonts, metadata
+components/           Navbar, Hero, About, Projects, Experience, Skills, Contact, Footer
+components/admin/     admin UI (config-driven: fields.ts)
+lib/
+  content.ts          cached data loader with per-section fallback
+  siteText.ts         all UI labels + defaults
+  fallback.ts         draft content used if Supabase is unreachable
+supabase/             SQL for schema, admin access, v2 and seed
+```
+
+## Deploying (Vercel)
+
+- Framework preset: **Next.js**
+- Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Supabase → Authentication → URL Configuration → Site URL = your Vercel URL

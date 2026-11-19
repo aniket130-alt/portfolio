@@ -1,0 +1,22 @@
+import { ArrowUp } from "lucide-react";
+import type { SiteText } from "@/lib/siteText";
+import { Monogram } from "./ui";
+
+export function Footer({ name, initials, year, t }: { name: string; initials: string; year: number; t: SiteText }) {
+  return (
+    <footer className="border-t border-line">
+      <div className="container-x flex flex-col items-center gap-4 py-8 text-sm text-subtle sm:flex-row sm:justify-between">
+        <div className="flex items-center gap-3">
+          <Monogram initials={initials} className="size-7 text-[11px]" />
+          <p>
+            © {year} <span className="text-ink">{name}</span>. {t.footer_rights}
+          </p>
+        </div>
+        <p className="text-center">{t.footer_built_with}</p>
+        <a href="#home" className="inline-flex min-h-10 items-center gap-1.5 hover:text-ink">
+          {t.footer_top} <ArrowUp className="size-4" aria-hidden="true" />
+        </a>
+      </div>
+    </footer>
+  );
+}
