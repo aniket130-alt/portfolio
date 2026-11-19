@@ -33,10 +33,8 @@ export const PROFILE_FIELDS: Field[] = [
   { key: "role", label: "Role", required: true, help: "Short job title, e.g. Full Stack Developer" },
   { key: "headline", label: "Hero role line", help: "e.g. Full Stack Developer | B.Tech CSE" },
   { key: "intro", label: "Hero intro", type: "textarea", wide: true },
-  { key: "about", label: "About bio", type: "textarea", wide: true },
   { key: "status_badge", label: "Availability badge text", help: "e.g. Available for opportunities" },
   { key: "available", label: "Show availability badge", type: "checkbox" },
-  { key: "location", label: "Location" },
   { key: "email", label: "Contact email", type: "email" },
   { key: "github_url", label: "GitHub URL", type: "url" },
   { key: "linkedin_url", label: "LinkedIn URL", type: "url" },
@@ -44,7 +42,16 @@ export const PROFILE_FIELDS: Field[] = [
   { key: "x_url", label: "X / Twitter URL (optional)", type: "url" },
   { key: "reply_note", label: "Contact invitation", type: "textarea", wide: true },
   { key: "cv_url", label: "Resume (PDF)", type: "upload", accept: "application/pdf", folder: "resume", wide: true },
-  { key: "photo_url", label: "Photo (optional, shown in About)", type: "upload", accept: "image/*", folder: "profile", wide: true },
+];
+
+/** Fields shown in the About section (same `profile` row, edited in the About tab). */
+export const ABOUT_FIELDS: Field[] = [
+  { key: "about", label: "About bio", type: "textarea", wide: true },
+  {
+    key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: "image/*", folder: "about", wide: true,
+    help: "Replaces the AJ mark in the About card. PNG/SVG with a transparent background works best for a logo.",
+  },
+  { key: "location", label: "Location", help: "Shown under the image, after your degree" },
 ];
 
 export const TABLES: Record<string, TableConfig> = {

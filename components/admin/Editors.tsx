@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState } from "react";
 import { browserClient } from "@/lib/supabase";
 import { TEXT_FIELDS } from "@/lib/siteText";
 import { useAdmin } from "./context";
-import { PROFILE_FIELDS, type Field } from "./fields";
+import { ABOUT_FIELDS, PROFILE_FIELDS, TABLES, type Field } from "./fields";
 import { RecordForm } from "./RecordForm";
-import { ErrorBox, IconBtn } from "./TableEditor";
+import { ErrorBox, IconBtn, TableEditor } from "./TableEditor";
 
 /* ---------------- Profile (single row) ---------------- */
-export function ProfileEditor() {
+export function ProfileEditor({ fields = PROFILE_FIELDS }: { fields?: Field[] }) {
   const { toast, refresh } = useAdmin();
   const db = browserClient();
   const [row, setRow] = useState<Record<string, unknown> | null>(null);
@@ -29,7 +29,7 @@ export function ProfileEditor() {
   return (
     <div className="card p-4 sm:p-6">
       <RecordForm
-        fields={PROFILE_FIELDS}
+        fields={fields}
         row={row}
         onSave={async (values) => {
           const { data, error } = await db.from("profile").upsert({ id: 1, ...values }).select().single();
@@ -40,6 +40,34 @@ export function ProfileEditor() {
         }}
       />
     </div>
+  );
+}
+
+/* ---------------- About section: bio/image/location + stats + degree ---------------- */
+export function AboutEditor() {
+  return (
+    <div className="space-y-10">
+      <AdminSubsection title="Bio & image" sub="The text and image in the About card.">
+        <ProfileEditor fields={ABOUT_FIELDS} />
+      </AdminSubsection>
+      <AdminSubsection title="Stats" sub="The numbers next to your bio, e.g. 10+ Projects.">
+        <TableEditor config={TABLES.stats} />
+      </AdminSubsection>
+      <AdminSubsection title="Education" sub="The entry marked “Main degree” is shown under the About image.">
+        <TableEditor config={TABLES.education} />
+      </AdminSubsection>
+      <p className="text-sm text-subtle">The section heading (“About Me”) is under Site text → About.</p>
+    </div>
+  );
+}
+
+function AdminSubsection({ title, sub, children }: { title: string; sub: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <h2 className="text-lg font-semibold">{title}</h2>
+      <p className="mb-4 text-sm text-muted">{sub}</p>
+      {children}
+    </section>
   );
 }
 

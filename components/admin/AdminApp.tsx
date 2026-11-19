@@ -6,18 +6,17 @@ import { useCallback, useEffect, useState } from "react";
 import { browserClient, supabaseConfigured } from "@/lib/supabase";
 import { Monogram } from "../ui";
 import { AdminProvider, useAdmin } from "./context";
-import { MessagesView, ProfileEditor, SiteTextEditor } from "./Editors";
+import { AboutEditor, MessagesView, ProfileEditor, SiteTextEditor } from "./Editors";
 import { TABLES } from "./fields";
 import { inputCls } from "./FieldInput";
 import { TableEditor } from "./TableEditor";
 
 const TABS = [
   { id: "profile", label: "Profile" },
+  { id: "about", label: "About" },
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
-  { id: "stats", label: "Stats" },
-  { id: "education", label: "Education" },
   { id: "text", label: "Site text" },
   { id: "messages", label: "Messages" },
 ] as const;
@@ -196,9 +195,10 @@ function Editor() {
       <section aria-labelledby="tab-title">
         <h1 id="tab-title" className="mb-5 text-2xl font-bold tracking-tight">{TABS.find((t) => t.id === tab)?.label}</h1>
         {tab === "profile" && <ProfileEditor />}
+        {tab === "about" && <AboutEditor />}
         {tab === "text" && <SiteTextEditor />}
         {tab === "messages" && <MessagesView onCount={onCount} />}
-        {tab in TABLES && <TableEditor key={tab} config={TABLES[tab]} />}
+        {(tab === "projects" || tab === "experience" || tab === "skills") && <TableEditor key={tab} config={TABLES[tab]} />}
       </section>
     </div>
   );

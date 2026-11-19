@@ -33,11 +33,12 @@ export function About({
           <div aria-hidden="true" className="absolute inset-x-6 bottom-10 h-16 rounded-[50%] border border-accent/40 blur-[1px]" />
           <div aria-hidden="true" className="absolute size-40 rounded-full bg-accent/20 blur-3xl" />
           {profile.photo_url ? (
+            // Uncropped so logos keep their shape; sits above the location line.
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.photo_url}
               alt={profile.name}
-              className="relative size-28 rounded-2xl object-cover ring-1 ring-line-strong"
+              className="relative mb-8 max-h-[62%] max-w-[78%] object-contain drop-shadow-[0_10px_30px_rgb(37_137_255/0.35)]"
             />
           ) : (
             <Monogram initials={profile.initials} className="relative size-20 text-3xl" />
