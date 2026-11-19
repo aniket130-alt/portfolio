@@ -51,7 +51,7 @@ export function Hero({ profile, t }: { profile: Profile; t: SiteText }) {
               {t.hero_cta_primary} <ArrowRight className="size-4" aria-hidden="true" />
             </a>
             {profile.cv_url && (
-              <a href={profile.cv_url} className="btn-outline" download target="_blank" rel="noopener">
+              <a href="/resume" className="btn-outline" download>
                 <Download className="size-4" aria-hidden="true" /> {t.hero_cta_resume}
               </a>
             )}

@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import { Monogram } from "@/components/ui/Monogram";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -33,7 +33,7 @@ export function AboutCard({
       )}
       {caption && (
         <p className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-1.5 text-center text-xs text-ink/90">
-          <MapPin className="size-3.5 shrink-0 text-accent-soft" aria-hidden="true" />
+          <GraduationCap className="size-3.5 shrink-0 text-accent-soft" aria-hidden="true" />
           {caption}
         </p>
       )}

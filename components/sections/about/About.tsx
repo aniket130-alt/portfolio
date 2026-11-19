@@ -18,7 +18,7 @@ export function About({
   t: SiteText;
 }) {
   const degree = education.find((e) => e.is_degree) ?? education[0];
-  const caption = [degree?.label, profile.location].filter(Boolean).join(" • ");
+  const caption = degree?.label ?? "";
 
   return (
     <Section id="about">

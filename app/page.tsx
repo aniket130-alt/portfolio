@@ -17,7 +17,7 @@ export default async function Home() {
   const show = {
     about:
       isOn(t.show_about) &&
-      Boolean(c.profile.about || c.profile.photo_url || c.stats.length || c.education.length || c.profile.location),
+      Boolean(c.profile.about || c.profile.photo_url || c.stats.length || c.education.length),
     projects: isOn(t.show_projects) && c.projects.length > 0,
     experience: isOn(t.show_experience) && c.experience.length > 0,
     skills: isOn(t.show_skills) && c.skills.length > 0,

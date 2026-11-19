@@ -53,7 +53,6 @@ export const ABOUT_FIELDS: Field[] = [
     key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: IMAGE_ACCEPT, folder: "about", wide: true,
     help: "Replaces the AJ mark in the About card. PNG or WebP with a transparent background works best for a logo. Max 5 MB.",
   },
-  { key: "location", label: "Location", help: "Shown under the image, after your degree" },
 ];
 
 export const TABLES: Record<string, TableConfig> = {

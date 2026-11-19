@@ -58,11 +58,11 @@ function normProfile(p: Record<string, unknown> | null): Profile {
 
 /**
  * All public content for the home page. Cached and tagged so the admin page can
- * refresh it instantly (updateTag) after a save; otherwise it refreshes hourly.
+ * refresh it instantly (updateTag) after a save; otherwise it refreshes every minute.
  */
 export async function getContent(): Promise<Content> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes"); // admin saves refresh instantly (updateTag); this caps staleness at ~1 min
   cacheTag(CONTENT_TAG);
 
   const year = new Date().getFullYear();

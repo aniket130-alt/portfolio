@@ -46,7 +46,7 @@ Run these in **Supabase → SQL Editor**, in order:
 | Site text | Every label on the site, SEO title/description, show/hide sections |
 | Messages | Contact form submissions |
 
-Saving refreshes the public page immediately (`updateTag`); otherwise content is cached for an hour.
+Saving refreshes the public page immediately (`updateTag`); otherwise content refreshes every minute.
 
 ## Project structure
 
