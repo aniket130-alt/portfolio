@@ -1,3 +1,4 @@
+import { IMAGE_ACCEPT, PDF_ACCEPT } from "./FieldInput";
 import { SKILL_CATEGORIES } from "@/lib/types";
 
 export type FieldType =
@@ -41,15 +42,15 @@ export const PROFILE_FIELDS: Field[] = [
   { key: "instagram_url", label: "Instagram URL (optional)", type: "url" },
   { key: "x_url", label: "X / Twitter URL (optional)", type: "url" },
   { key: "reply_note", label: "Contact invitation", type: "textarea", wide: true },
-  { key: "cv_url", label: "Resume (PDF)", type: "upload", accept: "application/pdf", folder: "resume", wide: true },
+  { key: "cv_url", label: "Resume (PDF)", type: "upload", accept: PDF_ACCEPT, folder: "resume", wide: true },
 ];
 
 /** Fields shown in the About section (same `profile` row, edited in the About tab). */
 export const ABOUT_FIELDS: Field[] = [
   { key: "about", label: "About bio", type: "textarea", wide: true },
   {
-    key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: "image/*", folder: "about", wide: true,
-    help: "Replaces the AJ mark in the About card. PNG/SVG with a transparent background works best for a logo.",
+    key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: IMAGE_ACCEPT, folder: "about", wide: true,
+    help: "Replaces the AJ mark in the About card. PNG or WebP with a transparent background works best for a logo. Max 5 MB.",
   },
   { key: "location", label: "Location", help: "Shown under the image, after your degree" },
 ];
@@ -75,7 +76,7 @@ export const TABLES: Record<string, TableConfig> = {
       { key: "demo_url", label: "Live demo URL", type: "url", help: "Button only shows when set" },
       { key: "github_url", label: "GitHub URL", type: "url" },
       { key: "case_study_url", label: "Case study URL", type: "url" },
-      { key: "image_url", label: "Thumbnail (16:9)", type: "upload", accept: "image/*", folder: "projects", wide: true },
+      { key: "image_url", label: "Thumbnail (16:9)", type: "upload", accept: IMAGE_ACCEPT, folder: "projects", wide: true },
       { key: "published", label: "Published", type: "checkbox" },
     ],
     defaults: { published: true, features: [], tags: [] },

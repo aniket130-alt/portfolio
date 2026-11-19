@@ -32,7 +32,12 @@ export function ProfileEditor({ fields = PROFILE_FIELDS }: { fields?: Field[] })
         fields={fields}
         row={row}
         onSave={async (values) => {
-          const { data, error } = await db.from("profile").upsert({ id: 1, ...values }).select().single();
+          // The row already exists → UPDATE only these fields. (An upsert would try an INSERT first
+          // and fail on required columns like `name` when this form only edits part of the row.)
+          const exists = "name" in row;
+          const { data, error } = exists
+            ? await db.from("profile").update(values).eq("id", 1).select().single()
+            : await db.from("profile").insert({ id: 1, ...values }).select().single();
           if (error) { toast(error.message, true); return false; }
           setRow(data);
           refresh();

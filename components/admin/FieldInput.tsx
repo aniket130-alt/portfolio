@@ -9,6 +9,34 @@ export const inputCls =
   "w-full rounded-xl border border-line bg-surface-2/70 px-3 py-2.5 text-sm text-ink placeholder:text-subtle transition-colors hover:border-line-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30";
 
 const BUCKET = "portfolio";
+const MAX_BYTES = 5 * 1024 * 1024; // keep in sync with supabase/storage_hardening.sql
+
+// MIME type → file extension. Only these can be uploaded (SVG excluded: it can contain scripts).
+const ALLOWED: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp",
+  "image/gif": "gif",
+  "image/avif": "avif",
+  "application/pdf": "pdf",
+};
+/** Checks the file's real contents (magic bytes), not just its name/extension. */
+async function contentMatches(file: File, mime: string): Promise<boolean> {
+  const b = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+  const ascii = (from: number, to: number) => String.fromCharCode(...b.slice(from, to));
+  switch (mime) {
+    case "application/pdf": return ascii(0, 5) === "%PDF-";
+    case "image/png": return b[0] === 0x89 && ascii(1, 4) === "PNG";
+    case "image/jpeg": return b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
+    case "image/gif": return ascii(0, 4) === "GIF8";
+    case "image/webp": return ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP";
+    case "image/avif": return ascii(4, 8) === "ftyp" && /avi[fs]/.test(ascii(8, 12));
+    default: return false;
+  }
+}
+
+export const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,image/avif";
+export const PDF_ACCEPT = "application/pdf";
 
 /** Converts between DB values and what the input shows. */
 export function toInput(f: Field, v: unknown): string | boolean {
@@ -105,11 +133,24 @@ function UploadInput({
   const isImage = f.accept?.startsWith("image");
 
   async function upload(file: File) {
+    const allowedHere = (f.accept ?? "").split(",").map((s) => s.trim());
+    const ext = ALLOWED[file.type];
+    if (!ext || !allowedHere.includes(file.type)) {
+      return onToast(`That file type isn't allowed here. Use ${allowedHere.map((t) => ALLOWED[t]?.toUpperCase()).filter(Boolean).join(", ")}.`, true);
+    }
+    if (file.size > MAX_BYTES) {
+      return onToast(`File is ${(file.size / 1048576).toFixed(1)} MB — the limit is 5 MB.`, true);
+    }
+    if (!(await contentMatches(file, file.type))) {
+      return onToast(`This file isn't a real ${ext.toUpperCase()} (it may have been renamed). Please export it again.`, true);
+    }
     setBusy(true);
-    const safe = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
-    const path = `${f.folder ?? "uploads"}/${Date.now()}-${safe}`;
+    // Random name: never trust the uploaded filename; the extension comes from the checked MIME type.
+    const path = `${f.folder ?? "uploads"}/${crypto.randomUUID()}.${ext}`;
     const db = browserClient();
-    const { error } = await db.storage.from(BUCKET).upload(path, file, { cacheControl: "3600", upsert: false });
+    const { error } = await db.storage
+      .from(BUCKET)
+      .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
     setBusy(false);
     if (error) return onToast(`Upload failed: ${error.message}`, true);
     onChange(db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
