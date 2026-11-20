@@ -18,7 +18,7 @@ export function Footer({ name, initials, t }: { name: string; initials: string; 
           )}
         </div>
         {t.footer_built_with.trim() && <p className="text-center">{t.footer_built_with}</p>}
-        <a href="#home" className="inline-flex min-h-10 items-center gap-1.5 hover:text-ink">
+        <a href="#top" className="inline-flex min-h-10 items-center gap-1.5 hover:text-ink">
           {t.footer_top} <ArrowUp className="size-4" aria-hidden="true" />
         </a>
       </div>

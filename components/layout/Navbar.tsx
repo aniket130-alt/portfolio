@@ -9,20 +9,29 @@ export type NavLink = { href: string; label: string };
 export function Navbar({
   name,
   initials,
-  links: LINKS,
+  links,
   cta,
+  base = "",
+  current = "#home",
 }: {
   name: string;
   initials: string;
   links: NavLink[];
   cta: string;
+  /** "" on the home page (plain #anchors); "/" on other pages so links go back to home sections. */
+  base?: string;
+  /** Link highlighted initially (and permanently on other pages). */
+  current?: string;
 }) {
+  const LINKS = links;
+  const at = (href: string) => (base ? `${base}${href}` : href);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("#home");
+  const [active, setActive] = useState(current);
   const [scrolled, setScrolled] = useState(false);
 
   // Active section highlight
   useEffect(() => {
+    if (base) return; // section tracking only on the home page
     const sections = LINKS.map((l) => document.querySelector(l.href)).filter(Boolean) as Element[];
     const io = new IntersectionObserver(
       (entries) => {
@@ -32,7 +41,7 @@ export function Navbar({
     );
     sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, [LINKS]);
+  }, [LINKS, base]);
 
   // Translucent background once scrolled
   useEffect(() => {
@@ -63,7 +72,7 @@ export function Navbar({
       }`}
     >
       <nav className="container-x flex h-16 items-center justify-between md:h-[72px]" aria-label="Main">
-        <a href="#home" className="flex items-center gap-3 font-semibold" onClick={close}>
+        <a href={at("#home")} className="flex items-center gap-3 font-semibold" onClick={close}>
           <Monogram initials={initials} className="size-9 text-sm" />
           <span className="text-[15px] tracking-tight">{name}</span>
         </a>
@@ -72,7 +81,7 @@ export function Navbar({
           {LINKS.map((l) => (
             <li key={l.href}>
               <a
-                href={l.href}
+                href={at(l.href)}
                 aria-current={active === l.href ? "true" : undefined}
                 className={`relative rounded-lg px-3 py-2 text-sm transition-colors duration-200 ${
                   active === l.href ? "text-accent-soft" : "text-muted hover:text-ink"
@@ -88,7 +97,7 @@ export function Navbar({
         </ul>
 
         <div className="flex items-center gap-2">
-          <a href="#contact" className="btn-outline hidden min-h-10 rounded-full px-4 sm:inline-flex">
+          <a href={at("#contact")} className="btn-outline hidden min-h-10 rounded-full px-4 sm:inline-flex">
             {cta} <ArrowRight className="size-4" aria-hidden="true" />
           </a>
           <button
@@ -114,7 +123,7 @@ export function Navbar({
           {LINKS.map((l) => (
             <li key={l.href}>
               <a
-                href={l.href}
+                href={at(l.href)}
                 onClick={close}
                 aria-current={active === l.href ? "true" : undefined}
                 className={`flex min-h-12 items-center rounded-lg px-3 text-base ${
@@ -126,7 +135,7 @@ export function Navbar({
             </li>
           ))}
           <li className="mt-2 px-1 pb-2">
-            <a href="#contact" onClick={close} className="btn-primary w-full">
+            <a href={at("#contact")} onClick={close} className="btn-primary w-full">
               {cta} <ArrowRight className="size-4" aria-hidden="true" />
             </a>
           </li>
