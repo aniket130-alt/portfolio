@@ -105,6 +105,8 @@ export async function getContent(): Promise<Content> {
       github_url: url(p.github_url),
       // Old v1 column "link_url" becomes the case-study / details link.
       case_study_url: url(p.case_study_url) ?? url(p.link_url),
+      extra_url: url(p.extra_url),
+      extra_label: str(p.extra_label),
       published: true,
       sort_order: Number(p.sort_order ?? 0),
     })) as Project[],

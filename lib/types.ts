@@ -43,6 +43,8 @@ export type Project = {
   demo_url: string | null;
   github_url: string | null;
   case_study_url: string | null;
+  extra_url: string | null;     // custom link, button text in extra_label
+  extra_label: string | null;
   published: boolean;
   sort_order: number;
 };

@@ -19,7 +19,9 @@ export function Contact({ profile, t }: { profile: Profile; t: SiteText }) {
           <div>
             <SectionHeading id="contact-title" lead={t.contact_lead} accent={t.contact_accent} />
             <p className="-mt-4 text-2xl font-bold tracking-tight md:text-3xl">{t.contact_heading}</p>
-            {profile.reply_note && <p className="mt-3 max-w-md text-muted">{profile.reply_note}</p>}
+            {profile.reply_note && (
+              <p className={`mt-3 text-muted ${showForm ? "max-w-md" : ""}`}>{profile.reply_note}</p>
+            )}
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               {profile.email && (

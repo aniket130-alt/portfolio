@@ -94,6 +94,8 @@ alter table public.projects add column if not exists tags           text[] not n
 alter table public.projects add column if not exists demo_url       text;
 alter table public.projects add column if not exists github_url     text;
 alter table public.projects add column if not exists case_study_url text;
+alter table public.projects add column if not exists extra_url      text;  -- custom link (Play Store, Figma, video…)
+alter table public.projects add column if not exists extra_label    text;  -- its button text
 
 create table if not exists public.experience (
   id          bigint generated always as identity primary key,

@@ -39,9 +39,10 @@ export const TEXT_FIELDS = [
   { group: "Projects", key: "projects_lead", label: "Heading", default: "My" },
   { group: "Projects", key: "projects_accent", label: "Heading (highlighted)", default: "Projects" },
   { group: "Projects", key: "projects_sub", label: "Subtitle", default: "Some of my featured work." },
-  { group: "Projects", key: "project_demo_label", label: "Live demo button", default: "Live demo" },
+  { group: "Projects", key: "project_demo_label", label: "Live site button", default: "Visit site" },
   { group: "Projects", key: "project_github_label", label: "GitHub button", default: "GitHub" },
   { group: "Projects", key: "project_case_label", label: "Case study button", default: "Case study" },
+  { group: "Projects", key: "project_link_label", label: "Custom link button (when a project has no own text)", default: "View project" },
 
   { group: "Experience", key: "experience_lead", label: "Heading", default: "Work" },
   { group: "Experience", key: "experience_accent", label: "Heading (highlighted)", default: "Experience" },

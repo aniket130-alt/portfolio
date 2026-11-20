@@ -14,7 +14,7 @@ export function Projects({ projects, t }: { projects: Project[]; t: SiteText }) 
           <Reveal as="li" key={p.id} delay={(i % 3) * 70} className="h-full">
             <ProjectCard
               project={p}
-              labels={{ demo: t.project_demo_label, github: t.project_github_label, caseStudy: t.project_case_label }}
+              labels={{ demo: t.project_demo_label, github: t.project_github_label, caseStudy: t.project_case_label, link: t.project_link_label }}
             />
           </Reveal>
         ))}
