@@ -33,7 +33,7 @@ export function FieldInput({
     return (
       <label htmlFor={id} className={`flex min-h-11 cursor-pointer items-center gap-3 self-end ${wide}`}>
         <input id={id} type="checkbox" checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)}
-          className="size-5 accent-[#2589ff]" />
+          className="size-5 accent-accent" />
         <span className="text-sm text-ink">{f.label}</span>
       </label>
     );

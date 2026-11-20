@@ -44,12 +44,12 @@ export function Dashboard() {
                 onClick={() => go(t.id)}
                 aria-current={tab === t.id ? "page" : undefined}
                 className={`flex min-h-10 w-full items-center justify-between gap-2 rounded-xl px-3.5 text-sm font-medium whitespace-nowrap transition-colors ${
-                  tab === t.id ? "bg-accent text-white" : "text-muted hover:bg-surface hover:text-ink"
+                  tab === t.id ? "bg-accent text-on-accent" : "text-muted hover:bg-surface hover:text-ink"
                 }`}
               >
                 {t.label}
                 {t.id === "messages" && unread > 0 && (
-                  <span className={`rounded-full px-1.5 text-[11px] font-bold ${tab === t.id ? "bg-white text-accent" : "bg-accent text-white"}`}>
+                  <span className={`rounded-full px-1.5 text-[11px] font-bold ${tab === t.id ? "bg-on-accent text-accent" : "bg-accent text-on-accent"}`}>
                     {unread}
                   </span>
                 )}

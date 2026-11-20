@@ -43,7 +43,7 @@ Run these in **Supabase → SQL Editor**, in order:
 | Projects | Cards: summary, features, tags, demo/GitHub/case-study links, thumbnail, published |
 | Experience | Timeline: role, company, dates, location, bullets, tags |
 | Skills | Grouped chips (category + Simple Icons slug) |
-| Site text | Every label on the site, SEO title/description, show/hide sections |
+| Site text | Colour theme (6 themes), every label on the site, SEO title/description, show/hide sections |
 | Messages | Contact form submissions |
 
 Saving refreshes the public page immediately (`updateTag`); otherwise content refreshes every minute.
@@ -82,6 +82,7 @@ components/
 lib/
   content.ts               cached loader, validates every URL/email/phone
   siteText.ts              all UI labels (editable in Admin → Site text)
+  themes.ts                colour themes (CSS in app/globals.css)
   fallback.ts              empty content if Supabase is unreachable (no sample data)
   supabase.ts, types.ts
 supabase/

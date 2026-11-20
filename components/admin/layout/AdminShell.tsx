@@ -12,7 +12,7 @@ export function AdminShell({ children, session }: { children: ReactNode; session
       <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-xl">
         <div className="container-x flex h-16 items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="grid size-9 place-items-center rounded-xl bg-accent text-white">
+            <span className="grid size-9 place-items-center rounded-xl bg-accent text-on-accent">
               <LayoutDashboard className="size-5" aria-hidden="true" />
             </span>
             <span className="font-semibold">Portfolio Admin</span>

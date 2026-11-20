@@ -8,7 +8,7 @@ export function ExperienceItem({ entry: e }: { entry: Experience }) {
     <>
       <span
         aria-hidden="true"
-        className="absolute top-2 left-0 size-[15px] rounded-full border-[3px] border-bg bg-accent shadow-[0_0_0_4px_rgb(37_137_255/0.2)]"
+        className="absolute top-2 left-0 size-[15px] rounded-full border-[3px] border-bg bg-accent shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]"
       />
       <div className="card p-5 md:p-6">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-6">

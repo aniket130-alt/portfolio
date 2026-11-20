@@ -13,7 +13,7 @@ export function ProjectThumbnail({ image, title }: { image: string | null; title
           className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       ) : (
-        <div className="grid size-full place-items-center bg-[radial-gradient(circle_at_30%_20%,rgb(37_137_255/0.28),transparent_60%),linear-gradient(135deg,#12203a,#0a1424)]">
+        <div className="grid size-full place-items-center bg-[radial-gradient(circle_at_30%_20%,color-mix(in_srgb,var(--color-accent)_28%,transparent),transparent_60%),linear-gradient(135deg,var(--color-art-1),var(--color-art-4))]">
           <div className="flex flex-col items-center gap-2 text-accent-soft/80">
             <Layers className="size-8" aria-hidden="true" />
             <span className="text-sm font-semibold text-ink/80">{title}</span>

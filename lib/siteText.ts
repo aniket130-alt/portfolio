@@ -6,10 +6,13 @@ export type TextField = {
   label: string;
   group: string;
   default: string;
-  type?: "text" | "textarea" | "toggle";
+  type?: "text" | "textarea" | "toggle" | "theme";
 };
 
 export const TEXT_FIELDS = [
+  // Appearance (theme keys/colours: lib/themes.ts)
+  { group: "Appearance", key: "theme", label: "Colour theme", default: "dark", type: "theme" },
+
   // Navigation
   { group: "Navigation", key: "nav_home", label: "Home link", default: "Home" },
   { group: "Navigation", key: "nav_about", label: "About link", default: "About" },

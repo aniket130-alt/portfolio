@@ -7,7 +7,7 @@ import { ProjectThumbnail } from "./ProjectThumbnail";
 /** One project: thumbnail, title, one-line value, key features, stack tags and links. */
 export function ProjectCard({ project: p, labels }: { project: Project; labels: ProjectLinkLabels }) {
   return (
-    <article className="group card flex h-full flex-col overflow-hidden transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_18px_50px_-20px_rgb(37_137_255/0.55)] focus-within:-translate-y-1 focus-within:border-accent/50 focus-within:shadow-[0_18px_50px_-20px_rgb(37_137_255/0.55)]">
+    <article className="group card flex h-full flex-col overflow-hidden transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_18px_50px_-20px_var(--color-glow)] focus-within:-translate-y-1 focus-within:border-accent/50 focus-within:shadow-[0_18px_50px_-20px_var(--color-glow)]">
       <ProjectThumbnail image={p.image_url} title={p.title} />
 
       <div className="flex flex-1 flex-col p-5 md:p-6">

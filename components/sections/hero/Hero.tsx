@@ -14,7 +14,7 @@ export function Hero({ profile, t }: { profile: Profile; t: SiteText }) {
       {/* faint grid + glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(rgb(148_170_200/0.07)_1px,transparent_1px),linear-gradient(90deg,rgb(148_170_200/0.07)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_35%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(var(--color-grid)_1px,transparent_1px),linear-gradient(90deg,var(--color-grid)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_35%,black,transparent)]"
       />
       <div
         aria-hidden="true"

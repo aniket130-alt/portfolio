@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Design tokens — from the portfolio blueprint (section 3) */
-@theme {
+@theme static {
   --color-bg: #07101e;          /* near-black navy */
   --color-surface: #0d1728;     /* cards / panels */
   --color-surface-2: #12203a;   /* raised elements, inputs */
@@ -14,6 +14,17 @@
   --color-line-strong: rgb(148 170 200 / 0.28);
   --color-success: #34d399;
   --color-danger: #f87171;
+  --color-accent-strong: #1660d6; /* gradient end */
+  --color-accent-hover: #3a95ff;
+  --color-on-accent: #ffffff;     /* text on accent fills */
+  --color-grid: rgb(148 170 200 / 0.07);
+  --color-art-1: #12203a;         /* hero illustration / placeholders */
+  --color-art-2: #07101e;
+  --color-art-3: #1b2b48;
+  --color-art-4: #0b1526;
+  /* derived from the accent, so every theme gets matching glows */
+  --color-glow: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --color-glow-strong: color-mix(in srgb, var(--color-accent) 85%, transparent);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
@@ -39,7 +50,7 @@
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
   }
-  ::selection { background: rgb(37 137 255 / 0.35); }
+  ::selection { background: color-mix(in srgb, var(--color-accent) 35%, transparent); }
   :focus-visible {
     outline: 2px solid var(--color-accent-soft);
     outline-offset: 3px;
@@ -67,7 +78,7 @@
       disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-primary {
-    @apply bg-accent text-white shadow-[0_8px_30px_-10px_rgb(37_137_255/0.8)] hover:bg-[#3a95ff] hover:-translate-y-px;
+    @apply bg-accent text-on-accent shadow-[0_8px_30px_-10px_var(--color-glow-strong)] hover:bg-accent-hover hover:-translate-y-px;
   }
   .btn-outline {
     @apply border border-line-strong bg-transparent text-ink hover:border-accent-soft hover:text-accent-soft;
@@ -75,6 +86,77 @@
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2/70 px-2.5 py-1 text-xs font-medium text-muted;
   }
+}
+
+/* Colour themes — chosen in Admin → Site text → Appearance (keys in lib/themes.ts).
+   The defaults in @theme above are the "dark" (Navy & Blue) theme. */
+html[data-theme="emerald"],
+html[data-theme="black"],
+html[data-theme="blue"],
+html[data-theme="lavender"] {
+  color-scheme: light;
+  --color-bg: #ffffff;
+  --color-surface: #f7f8fa;
+  --color-surface-2: #eef0f4;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-subtle: #64748b;
+  --color-line: rgb(15 23 42 / 0.1);
+  --color-line-strong: rgb(15 23 42 / 0.18);
+  --color-success: #059669;
+  --color-danger: #dc2626;
+  --color-on-accent: #ffffff;
+  --color-grid: rgb(15 23 42 / 0.06);
+  --color-art-1: #f1f4f9;
+  --color-art-2: #ffffff;
+  --color-art-3: #e7ebf2;
+  --color-art-4: #d9dfe9;
+  --color-glow: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  --color-glow-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+html[data-theme="emerald"] {
+  --color-accent: #059669;
+  --color-accent-soft: #047857;
+  --color-accent-strong: #065f46;
+  --color-accent-hover: #047857;
+}
+html[data-theme="black"] {
+  --color-accent: #111111;
+  --color-accent-soft: #3f3f46;
+  --color-accent-strong: #3f3f46;
+  --color-accent-hover: #27272a;
+}
+html[data-theme="blue"] {
+  --color-accent: #1f6fff;
+  --color-accent-soft: #1d4ed8;
+  --color-accent-strong: #1d4ed8;
+  --color-accent-hover: #1a5fe0;
+}
+html[data-theme="lavender"] {
+  --color-accent: #8b5cf6;
+  --color-accent-soft: #6d28d9;
+  --color-accent-strong: #6d28d9;
+  --color-accent-hover: #7c3aed;
+}
+html[data-theme="lavender-dark"] {
+  --color-bg: #0a0a0f;
+  --color-surface: #13131a;
+  --color-surface-2: #1b1b25;
+  --color-accent: #a78bfa;
+  --color-accent-soft: #c4b5fd;
+  --color-accent-strong: #7c5cf0;
+  --color-accent-hover: #b69dfb;
+  --color-on-accent: #0a0a0f;
+  --color-ink: #f5f3ff;
+  --color-muted: #c0bdd0;
+  --color-subtle: #8d8aa0;
+  --color-line: rgb(196 181 253 / 0.13);
+  --color-line-strong: rgb(196 181 253 / 0.26);
+  --color-grid: rgb(196 181 253 / 0.06);
+  --color-art-1: #1b1b25;
+  --color-art-2: #0a0a0f;
+  --color-art-3: #24222f;
+  --color-art-4: #111118;
 }
 
 /* Scroll reveal — elements start visible if JS is off; Reveal adds data-reveal="pending". */
