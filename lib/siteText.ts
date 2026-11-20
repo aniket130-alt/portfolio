@@ -67,7 +67,7 @@ export const TEXT_FIELDS = [
   { group: "Contact", key: "form_error", label: "Error message", default: "Something went wrong. Please try again or email me directly.", type: "textarea" },
 
   // Footer
-  { group: "Footer", key: "footer_rights", label: "Rights text", default: "All rights reserved." },
+  { group: "Footer", key: "footer_note", label: "Footer note (shown after your name)", default: "Thanks for stopping by!" },
   { group: "Footer", key: "footer_built_with", label: "Middle line (optional, e.g. Built with …)", default: "" },
   { group: "Footer", key: "footer_top", label: "Back to top link", default: "Back to top" },
 

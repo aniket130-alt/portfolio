@@ -44,7 +44,7 @@ export default async function Home() {
         {show.skills && <Skills skills={c.skills} t={t} />}
         <Contact profile={c.profile} t={t} />
       </main>
-      <Footer name={c.profile.name} initials={c.profile.initials} year={c.year} t={t} />
+      <Footer name={c.profile.name} initials={c.profile.initials} t={t} />
     </>
   );
 }
