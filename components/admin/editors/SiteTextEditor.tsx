@@ -63,7 +63,7 @@ export function SiteTextEditor() {
           items.map((f) => [f.key, kind(f) === "toggle" ? (saved[f.key] ?? f.default) !== "false" : saved[f.key] ?? ""])
         );
         return (
-          <details key={group} className="card overflow-hidden" open={group === "Sections" || group === "Appearance"}>
+          <details key={group} className="card overflow-hidden" open={group === "Sections" || group === "Appearance" || group === "Contact"}>
             <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 text-sm font-semibold sm:px-5">
               {group}
               <span className="text-xs font-normal text-subtle">{items.length} fields</span>

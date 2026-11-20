@@ -48,6 +48,7 @@ export const TEXT_FIELDS = [
   { group: "Experience", key: "experience_sub", label: "Subtitle", default: "Internships and roles, most recent first." },
 
   // Contact
+  { group: "Contact", key: "show_contact_form", label: "Show the “Send a message” form", default: "true", type: "toggle" },
   { group: "Contact", key: "contact_lead", label: "Heading", default: "Get" },
   { group: "Contact", key: "contact_accent", label: "Heading (highlighted)", default: "In Touch" },
   { group: "Contact", key: "contact_heading", label: "Big line", default: "Let's build something amazing together." },
@@ -79,7 +80,6 @@ export const TEXT_FIELDS = [
   { group: "Sections", key: "show_projects", label: "Show Projects", default: "true", type: "toggle" },
   { group: "Sections", key: "show_experience", label: "Show Experience", default: "true", type: "toggle" },
   { group: "Sections", key: "show_skills", label: "Show Skills", default: "true", type: "toggle" },
-  { group: "Sections", key: "show_contact_form", label: "Show contact form", default: "true", type: "toggle" },
   { group: "Sections", key: "show_hero_art", label: "Show hero illustration", default: "true", type: "toggle" },
 ] as const satisfies readonly TextField[];
 
