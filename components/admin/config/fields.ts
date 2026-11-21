@@ -53,7 +53,7 @@ export const ABOUT_FIELDS: Field[] = [
   { key: "about", label: "About bio", type: "textarea", wide: true },
   {
     key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: IMAGE_ACCEPT, folder: "about", wide: true,
-    crop: [{ label: "Square (best on desktop)", aspect: 1 }, { label: "4:3 (best on mobile)", aspect: 4 / 3 }, { label: "Portrait 4:5", aspect: 4 / 5 }],
+    crop: [{ label: "Square", aspect: 1 }], // the About card is square on every screen size
     help: "You can crop and zoom after choosing the file. PNG or WebP with a transparent background works best for a logo. Max 5 MB.",
   },
 ];

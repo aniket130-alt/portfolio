@@ -15,7 +15,7 @@ export function AboutCard({
   caption: string;
 }) {
   return (
-    <Reveal className="card relative grid aspect-[4/3] place-items-center overflow-hidden p-6 lg:aspect-square">
+    <Reveal className="card relative mx-auto grid aspect-square w-full max-w-[320px] place-items-center overflow-hidden p-6 lg:max-w-none">
       {image ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
