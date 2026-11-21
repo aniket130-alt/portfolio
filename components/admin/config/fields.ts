@@ -1,3 +1,4 @@
+import type { CropPreset } from "../form/ImageCropper";
 import { IMAGE_ACCEPT, PDF_ACCEPT } from "../form/upload";
 import { SKILL_CATEGORIES } from "@/lib/types";
 
@@ -15,6 +16,7 @@ export type Field = {
   options?: readonly string[];      // select
   accept?: string;                  // upload
   folder?: string;                  // upload → storage path prefix
+  crop?: CropPreset[];              // upload → open the cropper first (first preset = default shape)
   placeholder?: string;
 };
 
@@ -51,7 +53,8 @@ export const ABOUT_FIELDS: Field[] = [
   { key: "about", label: "About bio", type: "textarea", wide: true },
   {
     key: "photo_url", label: "About image (logo or photo)", type: "upload", accept: IMAGE_ACCEPT, folder: "about", wide: true,
-    help: "Replaces the AJ mark in the About card. PNG or WebP with a transparent background works best for a logo. Max 5 MB.",
+    crop: [{ label: "Square (best on desktop)", aspect: 1 }, { label: "4:3 (best on mobile)", aspect: 4 / 3 }, { label: "Portrait 4:5", aspect: 4 / 5 }],
+    help: "You can crop and zoom after choosing the file. PNG or WebP with a transparent background works best for a logo. Max 5 MB.",
   },
 ];
 

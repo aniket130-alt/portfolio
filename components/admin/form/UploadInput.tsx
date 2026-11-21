@@ -4,6 +4,7 @@ import { LoaderCircle, Upload } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Field } from "../config/fields";
 import { inputCls } from "../ui/styles";
+import { ImageCropper } from "./ImageCropper";
 import { uploadFile } from "./upload";
 
 /** URL field + Upload button: validates and stores the file, then fills in its public URL. */
@@ -20,7 +21,14 @@ export function UploadInput({
   onToast: (m: string, e?: boolean) => void;
 }) {
   const [busy, setBusy] = useState(false);
+  const [cropping, setCropping] = useState<File | null>(null);
   const isImage = f.accept?.startsWith("image");
+
+  // Images with crop presets go through the cropper first (GIFs skip it so animation is kept).
+  function pick(file: File) {
+    if (f.crop?.length && file.type.startsWith("image/") && file.type !== "image/gif") setCropping(file);
+    else upload(file);
+  }
 
   async function upload(file: File) {
     setBusy(true);
@@ -46,10 +54,19 @@ export function UploadInput({
           <span className="hidden sm:inline">{busy ? "Uploading…" : "Upload"}</span>
           <input type="file" accept={f.accept} className="absolute inset-0 cursor-pointer opacity-0" disabled={busy}
             aria-label={`Upload ${f.label}`}
-            onChange={(e) => { const file = e.target.files?.[0]; e.target.value = ""; if (file) upload(file); }} />
+            onChange={(e) => { const file = e.target.files?.[0]; e.target.value = ""; if (file) pick(file); }} />
         </label>
       </div>
       {help}
+      {cropping && f.crop && (
+        <ImageCropper
+          file={cropping}
+          presets={f.crop}
+          onCancel={() => setCropping(null)}
+          onOriginal={() => { const file = cropping; setCropping(null); upload(file); }}
+          onDone={(cropped) => { setCropping(null); upload(cropped); }}
+        />
+      )}
     </div>
   );
 }
